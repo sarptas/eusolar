@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ege Üniversitesi Cumhuriyet ve Atatürk Günleri</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .event-card {
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+        .event-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800">
+
+    <div class="container mx-auto p-4 md:p-8">
+        <header class="text-center mb-8">
+            <img src="https://i.postimg.cc/h4yVr4Mt/ege.png" alt="Ege Üniversitesi Logo" class="mx-auto mb-4 w-36 h-36">
+            <h1 class="text-3xl md:text-5xl font-bold text-red-800">Ege Üniversitesi</h1>
+            <h2 class="text-2xl md:text-3xl font-semibold text-red-700 mt-2">"Cumhuriyet ve Atatürk Günleri" Etkinlik Programı</h2>
+            <p class="text-lg text-gray-500 mt-1">18 Ekim - 14 Kasım 2025</p>
+        </header>
+
+        <!-- Filtreleme Bölümü -->
+        <div class="bg-white p-6 rounded-xl shadow-md mb-8 sticky top-4 z-10">
+            <h3 class="text-xl font-bold mb-4 text-slate-700">Etkinlikleri Filtrele</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+                <select id="filter-type" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500">
+                    <option value="">Tüm Etkinlik Türleri</option>
+                </select>
+                <select id="filter-organizer" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500">
+                    <option value="">Tüm Düzenleyen Birimler</option>
+                </select>
+                <select id="filter-location" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500">
+                    <option value="">Tüm Etkinlik Yerleri</option>
+                </select>
+                <input type="date" id="filter-date" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500">
+                <button id="reset-filters" class="w-full bg-red-600 text-white p-3 rounded-lg font-semibold hover:bg-red-700 transition-colors">Filtreleri Temizle</button>
+            </div>
+        </div>
+
+        <!-- Etkinlik Listesi -->
+        <div id="event-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Etkinlik kartları buraya eklenecek -->
+        </div>
+
+        <!-- Sonuç Bulunamadı Mesajı -->
+        <div id="no-results" class="hidden text-center py-16">
+            <p class="text-2xl text-gray-500">Filtrelerinize uygun etkinlik bulunamadı.</p>
+        </div>
+    </div>
+
+    <script>
+        const events = [
+            // PDF'ten çıkarılan veriler
+            { name: "Hanri Benazus Ege Üniversitesi Koleksiyonu - Cumhuriyet ve Atatürk Fotoğraf Sergisi", type: "Sergi", organizer: "Sağlık Kültür ve Spor Daire Başkanlığı", location: "Konak Meydanı", startDate: "2025-10-18", endDate: "2025-11-14", time: "10:00-17:00" },
+            { name: "Ege Zeybeği Dans Gösterisi", type: "Dans Gösterisi", organizer: "Sağlık Kültür ve Spor Daire Başkanlığı", location: "Konak Meydanı", startDate: "2025-10-18", endDate: "2025-10-18", time: "14:00-15:00" },
+            { name: "Cumhuriyet Konseri", type: "Konser", organizer: "E.Ü. Devlet Türk Musikisi Konservatuarı", location: "Konak Meydanı", startDate: "2025-10-18", endDate: "2025-10-18", time: "16:00-17:00" },
+            { name: "Atatürk'ün Sevdiği Şarkılar Mini Konser", type: "Konser", organizer: "E.Ü. Devlet Türk Musikisi Konservatuarı", location: "Konak Meydanı", startDate: "2025-10-20", endDate: "2025-10-20", time: "15:00-17:00" },
+            { name: "Çocuklarla Cumhuriyet Bayramı Kutlaması", type: "Kutlama", organizer: "Ege Üniversitesi Diş Hekimliği Fakültesi Pedodonti Anabilim Dalı", location: "Ege Üniversitesi Diş Hekimliği Fakültesi Pedodonti Kliniği", startDate: "2025-10-22", endDate: "2025-10-22", time: "09:00-12:00" },
+            { name: "29 Ekim Cumhuriyet Bayramı Kutlamaları", type: "Kutlama", organizer: "Ege Üniversitesi Diş Hekimliği Fakültesi Ortodonti Anabilim Dalı", location: "Ege Üniversitesi Diş Hekimliği Fakültesi Ortodonti Kliniği", startDate: "2025-10-22", endDate: "2025-10-31", time: "Tüm Gün" },
+            { name: "Cumhuriyete Giden Süreçte Yaşanan Olaylar", type: "Konferans", organizer: "Atatürk İlkeleri ve İnkılap Tarihi Uygulama ve Araştırma Merkezi / Moda ve Tasarım Meslek Yüksekokulu", location: "Moda ve Tasarım Meslek Yüksekokulu", startDate: "2025-10-23", endDate: "2025-10-23", time: "13:00", speaker: "Öğr.Gör. Zeynep TÜRKYILMAZ" },
+            { name: "Cumhuriyet'e Giden Süreçte Yaşanan Gelişmeler", type: "Söyleşi", organizer: "Moda Tasarım Yüksekokulu Moda Tasarımı Bölümü", location: "Ege Üniversitesi Ege MYO Derslik/F18", startDate: "2025-10-23", endDate: "2025-10-23", time: "13:15" },
+            { name: "Cumhuriyetin Kazanımlarından Türk Ordusunda Kadın Subaylar", type: "Konferans", organizer: "Eğitim Fakültesi / Atatürk İlkeleri ve İnkılap Tarihi Uygulama ve Araştırma Merkezi", location: "Eğitim Fakültesi", startDate: "2025-10-23", endDate: "2025-10-23", time: "10:30", speaker: "Öğr.Gör.Dr. Gülben MAT" },
+            { name: "Semih BECEREN 'Atatürk RESİM SERGİSİ'", type: "Sergi", organizer: "Sağlık Kültür ve Spor Daire Başkanlığı", location: "Sağlık Kültür ve Spor Daire Başkanlığı", startDate: "2025-10-23", endDate: "2025-10-31", time: "Tüm gün" },
+            { name: "Cumhuriyet ve Atatürk Belgeseli Gösterimi", type: "Belgesel Gösterimi", organizer: "Sağlık Kültür ve Spor Daire Başkanlığı", location: "Kültür Sanat Evi", startDate: "2025-10-23", endDate: "2025-10-24", time: "10:00-17:00" },
+            { name: "(Hanri BENAZUS) Atatürk Aramızda 'Fotoğraf Sergisi'", type: "Fotoğraf Sergisi", organizer: "Sağlık Kültür ve Spor Daire Başkanlığı", location: "Atatürk Kültür Merkezi", startDate: "2025-10-23", endDate: "2025-11-11", time: "Tüm Gün" },
+            { name: "Atatürk'ün Cumhurbaşkanlığı Döneminde Üniversite Reformu", type: "Konferans", organizer: "Sağlık Bilimleri Fakültesi / Atatürk İlkeleri ve İnkılap Tarihi Uygulama ve Araştırma Merkezi", location: "Sağlık Bilimleri Fakültesi Ebelik Bölümü K1-01 No'lu Derslik", startDate: "2025-10-24", endDate: "2025-10-24", time: "09:30", speaker: "Öğr. Gör. Oktay ÇANAKLI" },
+            { name: "Atatürk'ten Günümüze Cumhuriyet", type: "Konferans", organizer: "Çeşme Turizm Fakültesi", location: "Çeşme Turizm Fakültesi Konferans Salonu", startDate: "2025-10-24", endDate: "2025-10-24", time: "10:40", speaker: "Öğr. Gör. Mehmet Uysal" },
+            { name: "Cumhuriyet ve Atatürk Günleri Koşusu", type: "Koşu", organizer: "Spor Bilimleri Fakültesi Dekanlığı", location: "E.Ü. Spor Bilimleri Fakültesi Önünden", startDate: "2025-10-24", endDate: "2025-10-24", time: "11:00" },
+            { name: "Cumhuriyetin Kazanımlarından Türk Ordusunda Kadın Subaylar", type: "Konferans", organizer: "Eğitim Fakültesi /Atatürk İlkeleri ve İnkılap Tarihi Uygulama ve Araştırma Merkezi", location: "Eğitim Fakültesi", startDate: "2025-10-24", endDate: "2025-10-24", time: "10:30", speaker: "Öğr. Gör. Dr Gülben MAT" },
+            { name: "Geçmişten Günümüze Cumhuriyet ve Atatürk", type: "Konferans", organizer: "Eğitim Fakültesi, Türkçe ve Sosyal Bilgiler Eğitimi Bölümü", location: "Eğitim Fakültesi Konferans Salonu", startDate: "2025-10-27", endDate: "2025-10-27", time: "10:30", speaker: "Prof. Dr. Mehmet Emin Elmacı" },
+            { name: "Atatürk'ün Barış Politikası", type: "Konferans", organizer: "Edebiyat Fakültesi Dekanlığı ve Tarih Bölümü işbirliği", location: "Prof. Dr. Nuri BİLGİN Konferans Salonu", startDate: "2025-10-27", endDate: "2025-10-27", time: "11:00" },
+            { name: "29 Ekim Cumhuriyet Bayramı Plastik Sanatlar Grup Sergisi II CUMHURİYET", type: "Sergi", organizer: "E.Ü. İletişim Fakültesi ile Dokuz Eylül Üniversitesi Eğitim Bilimleri Enstitüsü", location: "İletişim Fakültesi Fuaye Alanı", startDate: "2025-10-27", endDate: "2025-10-27", time: "13:00" },
+            { name: "Cumhuriyete Giden Süreçte Atatürk ve Türkiye", type: "Söyleşi", organizer: "Havacılık Meslek Yüksekokulu", location: "Havacılık MYO Makbule Eroğlu Konferans Salonu", startDate: "2025-10-27", endDate: "2025-10-27", time: "14:00", speaker: "Prof. Dr. Hasan MERT" },
+            { name: "'Cumhuriyet ve Atatürk' Afiş sergisi", type: "Afiş Sergisi", organizer: "Eğitim Fakültesi, Güzel Sanatlar Eğitimi Bölümü", location: "Eğitim Fakültesi Sergi Alanı", startDate: "2025-10-27", endDate: "2025-10-27", time: "15:00" },
+            { name: "29 Ekim Cumhuriyet Bayramı Çelenk Sunma Töreni", type: "Tören", organizer: "Ege Üniversitesi Rektörlüğü", location: "E.Ü. Cumhuriyetin 100. Yıl Anıtı Önü", startDate: "2025-10-28", endDate: "2025-10-28", time: "09:30" },
+            { name: "Cumhuriyete Giden Yol ve Atatürk Konferansı", type: "Konferans", organizer: "Ege Üniversitesi Rektörlüğü", location: "Fen Fakültesi", startDate: "2025-10-28", endDate: "2025-10-28", time: "10:00", speaker: "Prof. Dr. Hasan MERT" },
+            { name: "Ege Zeybeği Dans Gösterisi", type: "Dans Gösterisi", organizer: "Sağlık Kültür ve Spor Daire Başkanlığı", location: "Cumhuriyet Meydanı", startDate: "2025-10-29", endDate: "2025-10-29", time: "10:00-11:00" },
+            { name: "Atatürk'ün Vefatı ve Anıtkabir", type: "Konferans", organizer: "Aliağa Meslek Yüksekokulu / Atatürk İlkeleri ve İnkılap Tarihi Uygulama ve Araştırma Merkezi", location: "Aliağa Meslek Yüksekokulu Konferans Salonu", startDate: "2025-10-30", endDate: "2025-10-30", time: "09:30", speaker: "Öğr. Gör. Oktay ÇANAKLI" },
+            { name: "Atatürk'ün Önderliğinde Fen Bilimlerinin Gelişimi", type: "Konferans", organizer: "Eczacılık Fakültesi /Atatürk İlkeleri ve İnkılap Tarihi Bölümü", location: "Eczacılık Fakültesi", startDate: "2025-10-30", endDate: "2025-10-30", time: "10:45", speaker: "Öğr. Gör. Mehmet Ali Durmuş" },
+            { name: "Atatürk Temalı Tahta Kalıp Baskı Sanatı", type: "Atölye Çalışması", organizer: "Emel Akın Meslek Yüksekokulu", location: "Emel Akın Meslek Yüksekokulu Kantini", startDate: "2025-10-30", endDate: "2025-10-30", time: "11:00" },
+            { name: "Kültürel Miras Olarak Tarihi Tire Kapılarının İllüstrasyon Tekniği ile Kumaş Tasarımına Yansıması", type: "Atölye Çalışması", organizer: "Bayındır Meslek Yüksekokulu / Öğr. Gör. İlknur BADEMCİ", location: "Tire Kutsan MYO", startDate: "2025-10-30", endDate: "2025-10-30", time: "11:00-15:00" },
+            { name: "Atatürk Dönemi Türkiye'sinde Devletçiliğin Zirai ve Bilimsel Boyutu", type: "Konferans", organizer: "Atatürk İlkeleri ve İnkılap Tarihi Uygulama ve Araştırma Merkezi / Ziraat Fakültesi Tarım Ekonomisi Bölümü", location: "Ziraat Fakültesi", startDate: "2025-10-30", endDate: "2025-10-30", time: "10:30", speaker: "Doç. Dr. Okan CEYLAN" },
+            { name: "Atatürk ve Türk Tarımı", type: "Konferans", organizer: "Tarım Ekonomisi Bölümü", location: "Tarım Ekonomisi Bölümü Seminer Salonu", startDate: "2025-10-30", endDate: "2025-10-30", time: "14:00" },
+            { name: "Türklerde Cumhuriyet Düşüncesi ve Cumhuriyetin İlanı", type: "Söyleşi", organizer: "Ödemiş Sağlık Bilimleri Fakültesi", location: "Ödemiş Sağlık Bilimleri Fakültesi Konferans Salonu", startDate: "2025-10-30", endDate: "2025-10-30", time: "13:30" },
+            { name: "VEDA - Film Gösterimi", type: "Film Gösterimi", organizer: "Eğitim Fakültesi, Türkçe ve Sosyal Bilgiler Eğitimi Bölümü", location: "Eğitim Fakültesi Konferans Salonu", startDate: "2025-10-30", endDate: "2025-10-30", time: "14:30" },
+            { name: "Atatürk'ü Anlamak", type: "Konferans", organizer: "Ege Meslek Yüksekokulu", location: "Ege Meslek Yüksekokulu EGEM Salonu", startDate: "2025-11-03", endDate: "2025-11-03", time: "13:00", speaker: "Öğr. Gör. Latif DAŞDEMİR" },
+            { name: "Atatürk Döneminde Tarım Politikaları", type: "Konferans", organizer: "Ege Meslek Yüksekokulu", location: "Ege Meslek Yüksekokulu EGEM Salonu", startDate: "2025-11-03", endDate: "2025-11-03", time: "14:00", speaker: "Doç. Dr. Okan CEYLAN" },
+            { name: "Atatürk'ün Vefatı ve Cenaze Merasimi", type: "Söyleşi", organizer: "Fen Fakültesi/Kimya Bölümü/Atatürk İlkeleri ve İnkılap Tarihi Bölümü", location: "Fen Fakültesi Kimya Bölümü Seminer Salonu", startDate: "2025-11-04", endDate: "2025-11-04", time: "09:30", speaker: "Öğr. Gör. Dr. Gülben MAT" },
+            { name: "Cumhuriyet ve Atatürk Günleri", type: "Cumhuriyet ve Atatürk Günleri", organizer: "Kimya Anabilim Dalı", location: "Kimya Bölümü Seminer Salonu", startDate: "2025-11-04", endDate: "2025-11-04", time: "09:30" },
+            { name: "Atatürk Döneminde Modern Türkiye'nin İnşaası Ekonomi Nüfus ve Tarım", type: "Panel", organizer: "Türk Dünyası Araştırmaları Enstitüsü", location: "E.Ü. Türk Dünyası Araştırmaları Enstitüsü Konferans Salonu", startDate: "2025-11-04", endDate: "2025-11-04", time: "11:00", moderator: "Prof. Dr. Abdullah TEMİZKAN", speaker: "Doç. Dr. Ferhat BERBER, Doç. Dr. Hamit ÖZMAN, Doç. Dr. Mehmet Fatih SANSAR" },
+            { name: "Atatürk ve Cumhuriyet", type: "Söyleşi", organizer: "Moda Tasarım Yüksekokulu Endüstriyel Tasarım Bölümü", location: "Ege Üniversitesi Ege MYO Derslik/F17", startDate: "2025-11-04", endDate: "2025-11-04", time: "13:15" },
+            { name: "Atatürk'ün Önderliğinde Üniversitelerimizin Gelişimi", type: "Söyleşi", organizer: "Aliağa Meslek Yüksekokulu", location: "A Blok Konferans Salonu", startDate: "2025-11-04", endDate: "2025-11-04", time: "10:00" },
+            { name: "Atatürk ve Tarım", type: "Konferans", organizer: "E.Ü. Bergama Meslek Yüksekokulu", location: "E.Ü. Bergama Meslek Yüksekokulu B Blok Konferans Salonu", startDate: "2025-11-04", endDate: "2025-11-04", time: "13:00", speaker: "Doç. Dr. Okan CEYLAN" },
+            { name: "Atatürk'ün Vefatı ve Anıtkabir", type: "Söyleşi", organizer: "Aliağa Meslek Yüksekokulu", location: "A Blok Konferans Salonu", startDate: "2025-11-04", endDate: "2025-11-04", time: "10:00", speaker: "Öğr. Gör. Oktay ÇANAKLI" },
+            { name: "Cumhuriyetten Günümüze Türkiye Tohumculuğu", type: "Konferans", organizer: "Ödemiş MYO", location: "Ödemiş MYO Konferans Salonu", startDate: "2025-11-04", endDate: "2025-11-04", time: "14:30", speaker: "Öğr. Gör. Dr. Hakan YILDIZ" },
+            { name: "Atatürk'ün Sofrası", type: "Konferans", organizer: "Atatürk İlkeleri ve İnkılap Tarihi Bölümü/ Sağlık Bilimleri Fakültesi", location: "Sağlık Bilimleri Fakültesi Konferans Salonu", startDate: "2025-11-05", endDate: "2025-11-05", time: "09:00", speaker: "Öğr. Gör Oktay ÇANAKLI" },
+            { name: "Erken Cumhuriyet'in Çok Kutuplu Ekonomi Diplomasisi", type: "Konferans", organizer: "Eğitim Fakültesi, Türkçe ve Sosyal Bilgiler Eğitimi Bölümü", location: "Eğitim Fakültesi Konferans Salonu", startDate: "2025-11-05", endDate: "2025-11-05", time: "11:00", speaker: "Doç. Dr. Hamit Özman" },
+            { name: "Atatürk Önderliğinde Üniversitelerimizin Gelişimi", type: "Söyleşi", organizer: "Aliağa Meslek Yüksekokulu", location: "A Blok Konferans Salonu", startDate: "2025-11-05", endDate: "2025-11-05", time: "13:15", speaker: "Öğr. Gör. Mehmet Ali DURMUŞ" },
+            { name: "10 Kasım Atatürk'ün Sözleriyle Koridorlar Projesi", type: "Proje", organizer: "Ege Üniversitesi Diş Hekimliği Fakültesi Restoratif Diş Tedavisi Anabilim Dalı", location: "Ege Üniversitesi Diş Hekimliği Fakültesi", startDate: "2025-11-05", endDate: "2025-11-11", time: "Tüm Gün" },
+            { name: "Atatürk Cumhuriyetinin Evrensel Boyutları", type: "Konferans", organizer: "Eğitim Fakültesi / Atatürk İlkeleri ve İnkılap Tarihi Uygulama ve Araştırma Merkezi", location: "Eğitim Fakültesi Konferans Salonu", startDate: "2025-11-06", endDate: "2025-11-06", time: "13:00", speaker: "Prof. Dr. Mustafa Kaymakçı" },
+            { name: "Türklerde Cumhuriyet Düşüncesi ve Cumhuriyetin İlanı", type: "Konferans", organizer: "Ödemiş MYO & Atatürk İlkeleri ve İnkılap Tarihi Bölüm Başkanlığı", location: "Ödemiş MYO Konferans Salonu", startDate: "2025-11-06", endDate: "2025-11-06", time: "11:30", speaker: "Öğr. Gör. Cansever TANYERİ" },
+            { name: "Atatürk İlkeleriyle Geleceği Yeniden Tasarlamak", type: "Çalıştay", organizer: "Eğitim Fakültesi Matematik ve Fen Bilimleri Bölümü / Türkçe ve Sosyal Bilimler Eğitimi Bölümü", location: "Eğitim Fakültesi (Kimya Laboratuvarı)", startDate: "2025-11-06", endDate: "2025-11-06", time: "14:00-16:00" },
+            { name: "'Ve Mavi Gözleri Çakmak Çakmaktı' Mustafa Kemal Atatürk Sergisi", type: "Sergi", organizer: "Su Ürünleri Fakültesi Temel Bilimler Bölümü", location: "Kültürpark Atlas Pavyon Sanat Galerisi", startDate: "2025-11-06", endDate: "2025-11-06", time: "Tüm Gün" },
+            { name: "10 Kasım Atatürk'ü Anma Programı", type: "Atatürk'ü Anma Töreni", organizer: "Ege Üniversitesi Rektörlüğü", location: "Rektörlük Binası Atatürk Büstü Önü", startDate: "2025-11-10", endDate: "2025-11-10", time: "08:50" },
+            { name: "Mavinin Derinliklerinde Ata'ya Saygı Dalışı", type: "Dalış Etkinliği", organizer: "Sualtı Araştırma ve Uygulama Merkezi / Urla Denizcilik Meslek Yüksekokulu", location: "Urla İskele", startDate: "2025-11-10", endDate: "2025-11-10", time: "10:00" },
+            { name: "Cumhuriyet ve Atatürk Günleri", type: "Atatürk'ü Anma", organizer: "Uluslararası Bilgisayar Enstitüsü", location: "Uluslararası Bilgisayar Enstitüsü Binası", startDate: "2025-11-10", endDate: "2025-11-10", time: "09:00-17:00" },
+            { name: "Karikatür ve Mizah Topluluğu 'Cumhuriyet ve Atatürk Karikatür Sergisi'", type: "Karikatür Sergisi", organizer: "Sağlık Kültür ve Spor Daire Başkanlığı", location: "Sağlık Kültür ve Spor Daire Başkanlığı Sergi Alanı", startDate: "2025-11-11", endDate: "2025-11-11", time: "Tüm Gün" },
+            { name: "Atatürk Döneminde Sağlık Eğitimi", type: "Konferans", organizer: "E.Ü. Nükleer Bilimler Enstitüsü /Atatürk İlkeleri ve İnkılap Tarihi Bölümü", location: "Nükleer Bilimler Enstitüsü Prof. Dr. Turgay KARALI Konferans Salonu", startDate: "2025-11-11", endDate: "2025-11-11", time: "10:30", speaker: "Öğr. Gör. Mehmet Ali DURMUŞ" },
+            { name: "Atatürk ve Bilim", type: "Konferans", organizer: "Eğitim Fakültesi, Türkçe ve Sosyal Bilimler Eğitimi Bölümü", location: "Eğitim Fakültesi Konferans Salonu", startDate: "2025-11-13", endDate: "2025-11-13", time: "13:30", speaker: "Prof. Dr. Sinan Akgöl" },
+            { name: "'Cumhuriyet ve Atatürk Günleri' Kitap Sergisi", type: "Kitap Sergisi", organizer: "Kütüphane ve Dokümantasyon Daire Başkanlığı", location: "Kütüphane ve Dokümantasyon Daire Başkanlığı / Kullanıcı Hizmetleri Şube Müdürlüğü (2. kat)", startDate: "2025-11-14", endDate: "2025-11-14", time: "Hafta İçi 08:00-17:00" },
+            { name: "'Cumhuriyet ve Atatürk' Afiş sergisi", type: "Afiş Sergisi", organizer: "Eğitim Fakültesi, Güzel Sanatlar Eğitimi Bölümü", location: "Eğitim Fakültesi Sergi Alanı", startDate: "2025-11-14", endDate: "2025-11-14", time: "15:00" }
+        ];
+
+        const eventList = document.getElementById('event-list');
+        const noResults = document.getElementById('no-results');
+        const filterType = document.getElementById('filter-type');
+        const filterOrganizer = document.getElementById('filter-organizer');
+        const filterLocation = document.getElementById('filter-location');
+        const filterDate = document.getElementById('filter-date');
+        const resetFiltersBtn = document.getElementById('reset-filters');
+
+        // Tarih formatlama fonksiyonu
+        function formatDate(dateString) {
+            const options = { year: 'numeric', month: 'long', day: 'numeric' };
+            return new Date(dateString + 'T00:00:00').toLocaleDateString('tr-TR', options);
+        }
+
+        // Etkinlikleri render etme fonksiyonu
+        function renderEvents(filteredEvents) {
+            eventList.innerHTML = '';
+            if (filteredEvents.length === 0) {
+                noResults.classList.remove('hidden');
+                eventList.classList.add('hidden');
+            } else {
+                noResults.classList.add('hidden');
+                eventList.classList.remove('hidden');
+                filteredEvents.forEach(event => {
+                    let dateDisplay = formatDate(event.startDate);
+                    if (event.startDate !== event.endDate) {
+                        dateDisplay = `${formatDate(event.startDate)} - ${formatDate(event.endDate)}`;
+                    }
+
+                    const card = `
+                        <div class="event-card bg-white p-6 rounded-lg shadow-md border-l-4 border-red-600 flex flex-col">
+                            <span class="inline-block bg-red-100 text-red-800 text-sm font-semibold mb-3 px-3 py-1 rounded-full w-max">${event.type}</span>
+                            <h4 class="text-xl font-bold text-gray-900 mb-2 flex-grow">${event.name}</h4>
+                            <div class="text-gray-600 space-y-2 text-sm mt-auto">
+                                <p><strong><svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 inline mr-2" viewBox="0 0 20 20" fill="currentColor"><path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z"/></svg>Düzenleyen:</strong> ${event.organizer}</p>
+                                <p><strong><svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 inline mr-2" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd" /></svg>Yer:</strong> ${event.location}</p>
+                                <p><strong><svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 inline mr-2" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd" /></svg>Tarih:</strong> ${dateDisplay}</p>
+                                <p><strong><svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 inline mr-2" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.414-1.415L11 9.586V6z" clip-rule="evenodd" /></svg>Saat:</strong> ${event.time}</p>
+                                ${event.speaker ? `<p><strong><svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 inline mr-2" viewBox="0 0 20 20" fill="currentColor"><path d="M2 5a2 2 0 012-2h7a2 2 0 012 2v4a2 2 0 01-2 2H9l-3 3v-3H4a2 2 0 01-2-2V5z"/><path d="M15 7v2a4 4 0 01-4 4H9.828l-1.766 1.767c.28.149.599.233.938.233h2l3 3v-3h1a2 2 0 002-2V9a2 2 0 00-2-2h-1z"/></svg>Konuşmacı:</strong> ${event.speaker}</p>` : ''}
+                            </div>
+                        </div>
+                    `;
+                    eventList.innerHTML += card;
+                });
+            }
+        }
+
+        // Filtreleri doldurma fonksiyonu
+        function populateFilters() {
+            const types = [...new Set(events.map(e => e.type))].sort();
+            const organizers = [...new Set(events.map(e => e.organizer))].sort();
+            const locations = [...new Set(events.map(e => e.location))].sort();
+
+            types.forEach(type => {
+                filterType.innerHTML += `<option value="${type}">${type}</option>`;
+            });
+            organizers.forEach(org => {
+                filterOrganizer.innerHTML += `<option value="${org}">${org}</option>`;
+            });
+            locations.forEach(loc => {
+                filterLocation.innerHTML += `<option value="${loc}">${loc}</option>`;
+            });
+        }
+        
+        // Filtreleri uygulama fonksiyonu
+        function applyFilters() {
+            const selectedType = filterType.value;
+            const selectedOrganizer = filterOrganizer.value;
+            const selectedLocation = filterLocation.value;
+            const selectedDate = filterDate.value;
+
+            const filteredEvents = events.filter(event => {
+                const isTypeMatch = !selectedType || event.type === selectedType;
+                const isOrganizerMatch = !selectedOrganizer || event.organizer === selectedOrganizer;
+                const isLocationMatch = !selectedLocation || event.location === selectedLocation;
+                
+                // Tarih kontrolü: Seçilen tarihin etkinliğin başlangıç ve bitiş tarihleri arasında olup olmadığını kontrol eder
+                const isDateMatch = !selectedDate || (selectedDate >= event.startDate && selectedDate <= event.endDate);
+
+                return isTypeMatch && isOrganizerMatch && isLocationMatch && isDateMatch;
+            });
+
+            renderEvents(filteredEvents);
+        }
+
+        // Event listener'ları ekleme
+        filterType.addEventListener('change', applyFilters);
+        filterOrganizer.addEventListener('change', applyFilters);
+        filterLocation.addEventListener('change', applyFilters);
+        filterDate.addEventListener('change', applyFilters);
+        
+        resetFiltersBtn.addEventListener('click', () => {
+            filterType.value = '';
+            filterOrganizer.value = '';
+            filterLocation.value = '';
+            filterDate.value = '';
+            applyFilters();
+        });
+
+        // Sayfa yüklendiğinde başlangıç fonksiyonlarını çağır
+        document.addEventListener('DOMContentLoaded', () => {
+            populateFilters();
+            renderEvents(events);
+        });
+    </script>
+</body>
+</html>
+
