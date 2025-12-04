@@ -9,7 +9,8 @@
       <name>Hasan Sarptaş</name>
       <email>hasan.sarptas@ege.edu.tr</email>
     </author>
-    <category citation-format="author-date" field="science"/>
+    <category citation-format="author-date"/>
+    <category field="science"/>
     <summary>Bu stil dosyası Chicago 17ed (author date) temel alınarak hazırlanmıştır.</summary>
     <updated>2024-12-14T21:52:26+00:00</updated>
     <rights license="http://creativecommons.org/licenses/by-sa/3.0/">This work is licensed under a Creative Commons Attribution-ShareAlike 3.0 License</rights>
@@ -277,9 +278,9 @@
 <text variable="issue"/>
 </if>
 <else>
-<date>
-<date-part name="month"/>
-</date>
+  <date variable="issued">
+    <date-part name="month"/>
+  </date>
 </else>
 </choose>
 </group>
@@ -674,3 +675,4 @@
 </layout>
 </bibliography>
 </style>
+
