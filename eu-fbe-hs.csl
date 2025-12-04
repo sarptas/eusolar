@@ -1,17 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
 <style xmlns="http://purl.org/net/xbiblio/csl" class="in-text" version="1.0" page-range-format="expanded" default-locale="tr-TR">
-<info>
-  <title>Ege Üniversitesi Fen Bilimleri Enstitüsü</title>
-  <title-short>EÜ-FBE</title-short>
- <id>https://raw.githubusercontent.com/sarptas/eusolar/refs/heads/main/eu-fbe-hs.csl</id>  
-<author>
-    <name>Hasan Sarptaş</name>
-    <email>hasan.sarptas@ege.edu.tr</email>
-  </author>
-  <category citation-format="author-date" field="science"/>
-  <summary>Bu stil dosyası Chicago 17ed (author date) temel alınarak hazırlanmıştır.</summary>
-  <updated>2025-12-05T19:00:00+00:00</updated>
-  <rights license="http://creativecommons.org/licenses/by-sa/3.0/">This work is licensed under a Creative Commons Attribution-ShareAlike 3.0 License</rights>
-</info>
+  <info>
+    <title>Ege Üniversitesi Fen Bilimleri Enstitüsü</title>
+    <title-short>EÜ-FBE</title-short>
+    <id>https://raw.githubusercontent.com/sarptas/eusolar/refs/heads/main/eu-fbe-hs.csl</id>
+    <link href="https://raw.githubusercontent.com/sarptas/eusolar/refs/heads/main/eu-fbe-hs.csl" rel="self"/>
+    <author>
+      <name>Hasan Sarptaş</name>
+      <email>hasan.sarptas@ege.edu.tr</email>
+    </author>
+    <category citation-format="author-date" field="science"/>
+    <summary>Bu stil dosyası Chicago 17ed (author date) temel alınarak hazırlanmıştır.</summary>
+    <updated>2024-12-14T21:52:26+00:00</updated>
+    <rights license="http://creativecommons.org/licenses/by-sa/3.0/">This work is licensed under a Creative Commons Attribution-ShareAlike 3.0 License</rights>
+  </info>
 <locale xml:lang="tr">
 <terms>
 <term name="editor" form="verb-short">ed.</term>
@@ -672,6 +674,7 @@
 </layout>
 </bibliography>
 </style>
+
 
 
 
