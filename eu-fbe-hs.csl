@@ -2,8 +2,8 @@
 <info>
   <title>Ege Üniversitesi Fen Bilimleri Enstitüsü</title>
   <title-short>EÜ-FBE</title-short>
-  <id>https://raw.githubusercontent.com/sarptas/eusolar/refs/heads/main/eu-fbe-hs.csl</id>
-  <author>
+ <id>https://raw.githubusercontent.com/sarptas/eusolar/refs/heads/main/eu-fbe-hs.csl</id>  
+<author>
     <name>Hasan Sarptaş</name>
     <email>hasan.sarptas@ege.edu.tr</email>
   </author>
@@ -672,5 +672,6 @@
 </layout>
 </bibliography>
 </style>
+
 
 
