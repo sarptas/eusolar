@@ -4,12 +4,12 @@
   <title-short>EÜ-FBE</title-short>
   <id>http://www.zotero.org/styles/ege-universitesi-fen-bilimleri-enstitusu</id>
   <author>
-    <name>Onur Özdikicierler</name>
-    <email>onur.ozdikicierler@ege.edu.tr</email>
+    <name>Hasan Sarptaş</name>
+    <email>hasan.sarptas@ege.edu.tr</email>
   </author>
   <category citation-format="author-date" field="science"/>
   <summary>Bu stil dosyası Chicago 17ed (author date) temel alınarak hazırlanmıştır.</summary>
-  <updated>2024-12-14T21:52:26+00:00</updated>
+  <updated>2025-12-05T19:00:00+00:00</updated>
   <rights license="http://creativecommons.org/licenses/by-sa/3.0/">This work is licensed under a Creative Commons Attribution-ShareAlike 3.0 License</rights>
 </info>
 <locale xml:lang="tr">
@@ -672,3 +672,4 @@
 </layout>
 </bibliography>
 </style>
+
