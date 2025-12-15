@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KADRİYE AVCÜ - TİK 1</title>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --accent-color: #3498db;
+            --bg-color: #f4f6f7;
+            --card-bg: #ffffff;
+            --text-color: #333333;
+            --border-radius: 8px;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 15px;
+            line-height: 1.6;
+        }
+
+        h1 {
+            text-align: center;
+            color: var(--primary-color);
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            border-bottom: 2px solid var(--accent-color);
+            padding-bottom: 10px;
+        }
+
+        /* Accordion Style */
+        details {
+            background-color: var(--card-bg);
+            margin-bottom: 12px;
+            border-radius: var(--border-radius);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            overflow: hidden;
+            border: 1px solid #e1e1e1;
+        }
+
+        summary {
+            padding: 15px;
+            cursor: pointer;
+            background-color: #fff;
+            font-weight: 600;
+            color: var(--primary-color);
+            position: relative;
+            list-style: none; /* Hide default arrow */
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            user-select: none;
+            transition: background-color 0.2s;
+        }
+
+        summary::-webkit-details-marker {
+            display: none;
+        }
+
+        summary:hover {
+            background-color: #f8f9fa;
+        }
+
+        summary::after {
+            content: '+';
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--accent-color);
+            margin-left: 10px;
+        }
+
+        details[open] summary {
+            background-color: var(--primary-color);
+            color: white;
+            border-bottom: 1px solid #ddd;
+        }
+
+        details[open] summary::after {
+            content: '-';
+            color: white;
+        }
+
+        .content {
+            padding: 15px;
+            background-color: #fff;
+            font-size: 0.95rem;
+        }
+
+        /* Typography inside content */
+        strong {
+            color: var(--primary-color);
+            font-weight: 700;
+        }
+
+        ul {
+            padding-left: 20px;
+            margin: 10px 0;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        .highlight-box {
+            background-color: #eef7fc;
+            border-left: 4px solid var(--accent-color);
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 0 4px 4px 0;
+        }
+
+        .evaluation-box {
+            background-color: #fff8e1;
+            border-left: 4px solid #f1c40f;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 0 4px 4px 0;
+        }
+
+        .btn-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 15px;
+            gap: 10px;
+        }
+
+        button {
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            cursor: pointer;
+        }
+        
+        button.secondary {
+            background-color: #95a5a6;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>KADRİYE AVCÜ - TİK 1</h1>
+
+    <div class="btn-container">
+        <button onclick="toggleAll(true)">Tümünü Aç</button>
+        <button class="secondary" onclick="toggleAll(false)">Tümünü Kapat</button>
+    </div>
+
+    <!-- Section 1 -->
+    <details>
+        <summary>1) Tezin problem tanımı, amaç ve araştırma soruları</summary>
+        <div class="content">
+            <p><strong>Problem/bağlam:</strong> Sanayide enerji yönetiminde gerçek zamanlı, doğrulanabilir ve öngörü/optimizasyon yeteneği olan dijital yaklaşımlara ihtiyaç; SKDM ve net-sıfır hedefleri ile güçlü gerekçe kurulmuş.</p>
+            <p><strong>Araştırma soruları (ölçülebilirlik):</strong></p>
+            <ul>
+                <li>Dijital ikiz tabanlı enerji yönetimi ölçülebilir tasarruf sağlar mı?</li>
+                <li>YZ tabanlı tahminler, IPMVP Option C regresyonuna göre daha yüksek doğruluk sunar mı?</li>
+                <li>Normalizasyon sonrası enerji yoğunluğu (EPI) nasıl değişir?</li>
+            </ul>
+            <p><strong>Amaç ve özgün katkı:</strong> IPMVP Option C + dijital ikiz + YZ optimizasyon bütünleşik çerçevesi ve OSB ölçeğinde genellenebilirlik iddiası net ifade edilmiş.</p>
+            <div class="highlight-box">
+                <strong>Görüş:</strong> Problem-amaç-soru hattı güçlü; tez çerçevesi akademik ve uygulamalı katkı potansiyeli taşıyor.
+            </div>
+        </div>
+    </details>
+
+    <!-- Section 2 -->
+    <details>
+        <summary>2) Yöntem / Tasarım</summary>
+        <div class="content">
+            <p><strong>Metodoloji zinciri:</strong> Veri toplama → Ön işleme → Baseline (IPMVP Option C) → YZ tahmin → Dijital ikiz entegrasyonu → Optimizasyon senaryoları → M&V → Performans değerlendirme, bütünleşik olarak kurgulanmış.</p>
+            <p><strong>IPMVP Option C yaklaşımı:</strong> Option C’nin tesis ölçeğine uygun gerekçesi, baseline oluşturma kriterleri (en az 6–12 ay veri; bağımsız değişkenlerle normalizasyon) tanımlanmış.</p>
+            <p><strong>Normalizasyon & tasarruf hesabı:</strong> Üretim, ürün/proses yükü, vardiya, sıcaklık/soğutma yükü, duruşlar, ekipman kullanım oranları gibi değişkenlerle normalizasyon; tasarruf hesabı Option C mantığında kurulmuş.</p>
+            <p><strong>Veri ve dijital ikiz mimarisi:</strong> Elektriksel, proses, üretim, çevresel değişken ve enerji fiyatı ile entegre mimari; “hibrit” dijital ikiz kurgusu belirtilmiş.</p>
+            <p><strong>KPI seti ve doğrulama metrikleri:</strong> EPI, tasarruf %, finansal kazanç, pik talep azaltımı, reaktif/THD, karbon azaltımı ve model hata metrikleri (MAE/RMSE/MAPE/R²/%95 GA) uygun.</p>
+            <div class="highlight-box">
+                <strong>Görüş:</strong> Metodolojik çerçeve doğru; ancak TİK-2’ye kadar “operasyonel detay” (baseline model kabul kriterleri, split protokolü, belirsizlik bütçesi vb.) için netleştirme gerekli.
+            </div>
+        </div>
+    </details>
+
+    <!-- Section 3 -->
+    <details>
+        <summary>3) Pilot saha, veri erişimi ve ölçüm altyapısı</summary>
+        <div class="content">
+            <p><strong>Pilot tesis:</strong> Pınar Entegre Et ve Un Sanayi Tesisi (KOSBİ) – ISO 50001 altyapısı ve 2023 enerji etütleri; 2024 elektrik tüketimi ~30 milyon kWh; 1.771 kWp GES ve ~2,5 milyon kWh/yıl üretim bilgisi verilmiş.</p>
+            <p><strong>Ölçüm sınırları ve veri frekansı:</strong> Ana giriş fideri, trafo çıkışları, kompresör hatları, soğutma grupları, proses motorları vb.; enerji verisi 15 dk–saatlik, üretim saatlik/vardiya bazlı, çevresel saatlik, çalışma durumu event bazlı.</p>
+            <div class="highlight-box">
+                <strong>Görüş:</strong> Pilot seçimi güçlü; ancak “ilk 6 ay” kapsamında veri erişiminin fiilen sağlandığına dair somut kanıt/çıktı (veri sözlüğü, örnek veri seti, eksik/aykırı oranları, ilk EDA/baseline prototipi) raporda sınırlı.
+            </div>
+        </div>
+    </details>
+
+    <!-- Section 4 -->
+    <details>
+        <summary>4) İlk Dönem İlerleme</summary>
+        <div class="content">
+            <p><strong>Güçlü taraf:</strong> Tez çerçevesi, metodoloji ve ölçme-doğrulama mantığı kapsamlı biçimde kurgulanmış; beklenen çıktılar ve KPI yaklaşımı tanımlanmış.</p>
+            <p><strong>Geliştirilmesi gereken taraf:</strong> İlk 6 ay için “yapıldı” niteliğinde ara ürünler (veri temini kanıtı, kod/prototip, ilk model performansı, baseline denemesi, ölçüm altyapısı doğrulama raporu) net sunulmamış.</p>
+        </div>
+    </details>
+
+    <!-- Section 5 -->
+    <details>
+        <summary>5) Güçlü yönler (Özet)</summary>
+        <div class="content">
+            <ul>
+                <li>SKDM/net-sıfır bağlamı ile güçlü gerekçe ve doğru problem tanımı.</li>
+                <li>Araştırma sorularının ölçülebilir ve sınanabilir şekilde kurulması.</li>
+                <li>IPMVP Option C’yi “referans doğrulama metodolojisi” olarak konumlama yaklaşımı.</li>
+                <li>Veri mimarisi + dijital ikiz + YZ + optimizasyon zincirinin bütüncül tasarlanması.</li>
+                <li>Pilot tesisin enerji yönetimi olgunluğu ve veri altyapısı açısından uygunluğu.</li>
+            </ul>
+        </div>
+    </details>
+
+    <!-- Section 6 -->
+    <details>
+        <summary>6) Kritik eksikler / Düzeltme gerektiren hususlar</summary>
+        <div class="content">
+            <p><strong>Somut ara çıktılar:</strong> TİK-2’ye kadar mutlaka “veri envanteri + veri kalitesi raporu + baseline prototipi + ilk YZ karşılaştırması” sunulmalı. (Mevcut rapor daha çok plan/kurgu ağırlıklı.)</p>
+            <p><strong>Dijital ikizin teknik tanımı:</strong> “Hibrit yapı” var; fakat hangi katman(lar)ın fizik-tabanlı/veri-tabanlı olduğu, güncelleme mantığı ve doğrulama prosedürü operasyonel düzeyde yazılmalı.</p>
+            <p><strong>Baseline/normalizasyon kabul kriterleri:</strong> Baseline model seçim kriterleri, hata/uygunluk eşikleri ve belirsizlik yaklaşımı netleştirilmeli (Option C çerçevesi var ancak uygulama ayrıntısı henüz sınırlı).</p>
+            <p><strong>Doküman format temizliği:</strong> Raporda yinelenen başlıklar ve “Formun Üstü/Altı” gibi artefaktlar bulunuyor; resmi TİK formatı için düzeltilmeli.</p>
+        </div>
+    </details>
+
+    <!-- Section 7 -->
+    <details>
+        <summary>7) TİK-2’ye kadar Önerilen Net Teslimler</summary>
+        <div class="content">
+            <ul>
+                <li><strong>a) Veri Sözlüğü + Envanter:</strong> değişkenler, birimler, kaynak sistem (SCADA/IoT), frekans, dönem, eksik/aykırı oranı, senkronizasyon yaklaşımı.</li>
+                <li><strong>b) Option C Baseline v1:</strong> en az 6–12 aylık veri ile; normalize edilmiş baseline ve artık analizi (ilk prototip).</li>
+                <li><strong>c) Karşılaştırmalı model protokolü:</strong> (klasik regresyon baseline) vs (XGBoost/LSTM) aynı veri bölme stratejisiyle; MAE/RMSE/MAPE/R² ile raporlama.</li>
+                <li><strong>d) Dijital ikiz MVP:</strong> en az bir alt sistem (örn. soğutma veya kompresör hattı) için senaryo/optimizasyon çıktısı + M&V kurgusu.</li>
+            </ul>
+        </div>
+    </details>
+
+    <!-- Section 8 -->
+    <details>
+        <summary>8) Karar</summary>
+        <div class="content">
+            <p><strong>Genel kanaat:</strong> Tez tasarımı ve bilimsel çerçeve uygun ve güçlü; pilot saha seçimi doğru.</p>
+            <div class="highlight-box">
+                <strong>Koşullu ilerleme notu:</strong> TİK-2’ye kadar “veri erişiminin kanıtlanması” ve “baseline + ilk model kıyasının” somut çıktılarla sunulması zorunlu öncelik olarak belirlenmiştir.
+            </div>
+        </div>
+    </details>
+
+    <hr style="border: 0; border-top: 1px dashed #ccc; margin: 20px 0;">
+    
+    <!-- Part A -->
+    <details>
+        <summary>A) Çerçeve ve araştırma soruları</summary>
+        <div class="content">
+            <p><strong>Tezin “tek cümlelik” ana hipotezi nedir?</strong></p>
+            <div class="highlight-box">Beklenen: Dijital ikiz + YZ + IPMVP Option C ile ölçülebilir tasarruf ve doğrulanabilir performans iyileşmesi.</div>
+            <div class="evaluation-box">Değerlendirme: Problem–amaç hattı güçlü; hipotez/başarı ölçütleri daha sayısallaştırılmalı.</div>
+            
+            <p><strong>Araştırma sorularını KPI’lara bire bir eşler misin?</strong></p>
+            <div class="highlight-box">Beklenen: Her soruya MAE/RMSE/MAPE, EPI, tasarruf %, pik talep, karbon azaltımı vb. net hedef.</div>
+            <div class="evaluation-box">Değerlendirme: Metrikler var; hedef eşikler ve kabul kriterleri eksik.</div>
+
+            <p><strong>“OSB ölçeğinde genellenebilirlik” iddianın sınırları nedir?</strong></p>
+            <div class="highlight-box">Beklenen: Hangi sektör/proses/dijital olgunluk koşullarında aktarılabilir; hangi koşullarda değil.</div>
+            <div class="evaluation-box">Değerlendirme: İddia değerli; sınır koşulları netleştirilmeli.</div>
+        </div>
+    </details>
+
+    <!-- Part B -->
+    <details>
+        <summary>B) Pilot tesis ve veri erişimi</summary>
+        <div class="content">
+            <p><strong>Hangi veri kaynaklarına erişim sağlandı?</strong></p>
+            <div class="highlight-box">Beklenen: SCADA/EMS/IoT verileri, üretim kayıtları, çevresel veriler; erişim kanıtı.</div>
+            <div class="evaluation-box">Değerlendirme: Raporda mimari var; erişim ve veri örneği kanıtı sunulmalı.</div>
+
+            <p><strong>Veri sözlüğü/enzvanteri hazır mı?</strong></p>
+            <div class="highlight-box">Beklenen: Tek sayfalık tablo + örnek ham veri.</div>
+            <div class="evaluation-box">Değerlendirme: TİK-2’ye kadar zorunlu teslim.</div>
+
+            <p><strong>Veri kalitesi: eksik veri oranları, aykırı değer oranı?</strong></p>
+            <div class="highlight-box">Beklenen: % eksik, gap-filling yöntemi, anomali tanımı, timestamp uyumu.</div>
+            <div class="evaluation-box">Değerlendirme: Preprocessing anlatılmış; ölçülü, sayısal kalite raporu yok.</div>
+
+            <p><strong>Ölçüm noktaları ve sayaç doğruluk sınıfları neler?</strong></p>
+            <div class="highlight-box">Beklenen: Submetering topolojisi, sayaç sınıfı, kalibrasyon periyodu.</div>
+            <div class="evaluation-box">Değerlendirme: Topoloji var; metrik doğruluk/kalibrasyon netleşmeli.</div>
+        </div>
+    </details>
+
+    <!-- Part C -->
+    <details>
+        <summary>C) IPMVP Option C – baseline, normalizasyon ve belirsizlik</summary>
+        <div class="content">
+            <p><strong>Baseline dönemini nasıl seçeceksin?</strong></p>
+            <div class="highlight-box">Beklenen: En az 6–12 ay, süreç stabilitesi, veri bütünlüğü gerekçesi.</div>
+            <div class="evaluation-box">Değerlendirme: Genel yaklaşım doğru; seçim kriterleri yazılı hale getirilmeli.</div>
+
+            <p><strong>Option C regresyon model formun nedir?</strong></p>
+            <div class="highlight-box">Beklenen: E(kWh)=f(üretim, HDD/CDD veya T, vardiya, ürün tipi, çalışma süresi, vb.).</div>
+            <div class="evaluation-box">Değerlendirme: Değişken sepeti var; model spesifikasyonu netleşmeli.</div>
+
+            <p><strong>Rutin / non-rutin ayarlamalar nasıl yapılacak?</strong></p>
+            <div class="highlight-box">Beklenen: Ürün karması değişimi, ekipman değişimi, büyük bakım gibi non-rutin tanımları.</div>
+            <div class="evaluation-box">Değerlendirme: Normalizasyon niyeti var; prosedür ve örnek senaryo beklenir.</div>
+
+            <p><strong>Baseline kabul kriterlerin neler?</strong></p>
+            <div class="highlight-box">Beklenen: Hedef eşikler ve “model kabul/ret” kararı.</div>
+            <div class="evaluation-box">Değerlendirme: KPI listesi var; eşikler yok.</div>
+
+            <p><strong>Belirsizlik bütçesi ve %95 güven aralığı?</strong></p>
+            <div class="highlight-box">Beklenen: Ölçüm belirsizliği + model belirsizliği ayrımı; raporlama şablonu.</div>
+            <div class="evaluation-box">Değerlendirme: %95 GA metrik olarak yazılmış; yöntem planı netleşmeli.</div>
+        </div>
+    </details>
+
+    <!-- Part D -->
+    <details>
+        <summary>D) Yapay zekâ modelleri</summary>
+        <div class="content">
+            <p><strong>Regresyon baseline ile YZ modellerini “adil” nasıl karşılaştıracaksın?</strong></p>
+            <div class="highlight-box">Beklenen: Aynı dönem, aynı değişken seti, aynı split; yalnızca model değişsin.</div>
+            <div class="evaluation-box">Değerlendirme: Kıyas hedefi doğru; protokol yazılmalı.</div>
+
+            <p><strong>Zaman serisi bölme stratejin nedir?</strong></p>
+            <div class="highlight-box">Beklenen: Veri sızıntısını engelleyen zaman tabanlı split.</div>
+            <div class="evaluation-box">Değerlendirme: Kritik; raporda operasyonel detay yok.</div>
+
+            <p><strong>Model açıklanabilirliği planın var mı?</strong></p>
+            <div class="highlight-box">Beklenen: Karar vericilere anlaşılır gerekçeler (hangi faktör tüketimi sürüklüyor).</div>
+            <div class="evaluation-box">Değerlendirme: Sanayi uygulaması için önemli; eklenmeli.</div>
+
+            <p><strong>Overfitting/konsept kayması (drift) durumunda?</strong></p>
+            <div class="highlight-box">Beklenen: Drift izleme, yeniden eğitim periyodu, performans alarmı.</div>
+            <div class="evaluation-box">Değerlendirme: Dijital ikiz “sürekli güncelleme” iddiası için şart.</div>
+        </div>
+    </details>
+
+    <!-- Part E -->
+    <details>
+        <summary>E) Dijital ikiz (DT) – kapsam, MVP ve doğrulama</summary>
+        <div class="content">
+            <p><strong>Dijital ikiz tam olarak neyi temsil ediyor?</strong></p>
+            <div class="highlight-box">Beklenen: Tesis mi, hat mı, alt sistem mi (ör. soğutma/kompresör).</div>
+            <div class="evaluation-box">Değerlendirme: “Hibrit DT” kavramı var; sistem sınırı netleşmeli.</div>
+
+            <p><strong>Fizik-tabanlı ve veri-tabanlı bileşenler hangileri?</strong></p>
+            <div class="highlight-box">Beklenen: Örn. enerji dengesi/termal model + YZ tahmin katmanı.</div>
+            <div class="evaluation-box">Değerlendirme: Kavramsal ifade var; bileşen listesi istenmeli.</div>
+
+            <p><strong>MVP planın nedir?</strong></p>
+            <div class="highlight-box">Beklenen: Tek alt sistem, gerçek zamanlı izleme + tahmin + senaryo.</div>
+            <div class="evaluation-box">Değerlendirme: TİK-2’ye kadar en kritik teslim.</div>
+
+            <p><strong>Dijital ikiz doğrulaması nasıl yapılacak?</strong></p>
+            <div class="highlight-box">Beklenen: Ölçüm verisi ile simülasyon/tahmin çıktısı kıyası; hedef hata eşikleri.</div>
+            <div class="evaluation-box">Değerlendirme: Doğrulama planı netleştirilmeli.</div>
+        </div>
+    </details>
+
+    <!-- Part F -->
+    <details>
+        <summary>F) Optimizasyon ve karar destek çıktıları</summary>
+        <div class="content">
+            <p><strong>Optimizasyonun karar değişkenleri, kısıtları ve amaç fonksiyonu?</strong></p>
+            <div class="highlight-box">Beklenen: Talep tarafı, set-point, çalışma saatleri; kalite/üretim kısıtları.</div>
+            <div class="evaluation-box">Değerlendirme: “Optimizasyon” var; matematiksel formülasyon gerek.</div>
+
+            <p><strong>Senaryo setin nedir?</strong></p>
+            <div class="highlight-box">Beklenen: Enerji fiyatı, üretim hacmi, sıcaklık, ekipman verimi senaryoları.</div>
+            <div class="evaluation-box">Değerlendirme: Çıktıların yönetilebilir olması için şart.</div>
+        </div>
+    </details>
+
+    <!-- Part G -->
+    <details>
+        <summary>G) Emisyon/karbon hesabı – tutarlılık kontrolü</summary>
+        <div class="content">
+            <p><strong>Hangi emisyon faktörü, hangi kaynak?</strong></p>
+            <div class="highlight-box">Beklenen: kgCO₂/kWh vb. ve kaynak/ yıl.</div>
+            <div class="evaluation-box">Değerlendirme: Raporda “12 milyon ton CO₂e emisyon faktörü” ifadesi birim/magnitüd açısından riskli; mutlaka düzeltilmeli.</div>
+
+            <p><strong>SKDM bağlamında hangi göstergeler?</strong></p>
+            <div class="highlight-box">Beklenen: Ürün bazlı karbon yoğunluğu; raporlama standardı.</div>
+            <div class="evaluation-box">Değerlendirme: Bağlam güçlü; metrik seti netleşmeli.</div>
+        </div>
+    </details>
+
+    <!-- Part H -->
+    <details>
+        <summary>H) Tez planı, teslimler ve dokümantasyon</summary>
+        <div class="content">
+            <p><strong>Önümüzdeki 6 ayın 3 “ölçülebilir teslimi” nedir?</strong></p>
+            <div class="highlight-box">Beklenen: (1) Veri sözlüğü+kalite raporu, (2) baseline v1, (3) YZ kıyas raporu + DT-MVP demo.</div>
+            <div class="evaluation-box">Değerlendirme: Planın çıktıya bağlanması gerekiyor.</div>
+
+            <p><strong>Literatür taraması nasıl belgelendi?</strong></p>
+            <div class="highlight-box">Beklenen: Literatür matrisi ve atıf düzeni.</div>
+            <div class="evaluation-box">Değerlendirme: Çerçeve var; sistematik kanıt (tablo) yok.</div>
+
+            <p><strong>Rapor formatı temizlenecek mi?</strong></p>
+            <div class="highlight-box">Beklenen: Yinelenen başlıklar ve form artefaktlarının giderilmesi.</div>
+            <div class="evaluation-box">Değerlendirme: Resmî rapor kalitesi için gerekli.</div>
+        </div>
+    </details>
+
+    <!-- Final Message -->
+    <div style="background-color: var(--primary-color); color: white; padding: 20px; border-radius: 8px; margin-top: 30px; text-align: center;">
+        <h3 style="color: white; border: none; margin-top: 0;">TOPLANTI SONUCU</h3>
+        <p style="font-size: 1.1em; font-style: italic;">
+            “Tez çerçevesi güçlü ve uygulanabilir; ancak TİK-2’ye kadar veri erişimi ve veri kalitesini sayısal kanıtlarla göstermeni, Option C baseline prototipini ve YZ karşılaştırma protokolünü çalışır örneklerle sunmanı bekliyoruz. Dijital ikiz MVP’si en az bir alt sistem üzerinde gösterilmeli.”
+        </p>
+    </div>
+
+    <script>
+        function toggleAll(shouldOpen) {
+            const details = document.querySelectorAll('details');
+            details.forEach(detail => {
+                if (shouldOpen) {
+                    detail.setAttribute('open', '');
+                } else {
+                    detail.removeAttribute('open');
+                }
+            });
+        }
+    </script>
+</body>
+</html>
