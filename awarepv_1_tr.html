@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AWARE PV Projesi TÜBİTAK Başvuru Formu</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700;500&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f4f7f6;
+            color: #333;
+            margin: 20px;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h1 {
+            color: #1e88e5;
+            text-align: center;
+            margin-bottom: 30px;
+            font-weight: 700;
+            width: 100%;
+            max-width: 800px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 800px;
+        }
+
+        .document-card {
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            padding: 15px 20px;
+            margin-bottom: 10px;
+            box-sizing: border-box;
+            transition: background-color 0.2s;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            border-left: 5px solid #00796b; /* Yeşil vurgu */
+        }
+
+        .document-card:hover {
+            background-color: #e8f5e9; /* Hafif yeşil hover */
+        }
+
+        .document-card a {
+            text-decoration: none;
+            color: #00796b;
+            font-weight: 500;
+            word-break: break-word;
+            display: block;
+            flex-grow: 1;
+            pointer-events: none; /* A tag'inin tıklama olayını devre dışı bırak, kartın tıklanmasını sağla */
+        }
+        
+        .document-card a:before {
+            content: "📄 "; /* Belge sembolü */
+        }
+
+        /* Görüntüleyici (Viewer) alanı */
+        .viewer-container {
+            display: none; /* Varsayılan olarak gizli */
+            margin-bottom: 20px;
+            width: 100%;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .viewer-container iframe {
+            width: 100%;
+            height: 600px; /* Belge için yeterli bir yükseklik */
+            border: none;
+        }
+    </style>
+    <script>
+        function toggleViewer(docId, fileId) {
+            const viewer = document.getElementById(docId);
+            const iframe = viewer.querySelector('iframe');
+            
+            // Mevcut sayfada açık olan tüm görüntüleyicileri kapat
+            document.querySelectorAll('.viewer-container').forEach(div => {
+                if (div.id !== docId) {
+                    div.style.display = 'none';
+                }
+            });
+            
+            // Tıklanan görüntüleyiciyi aç/kapat
+            if (viewer.style.display === 'block') {
+                viewer.style.display = 'none';
+                // iframe src'sini temizle/sıfırla
+                iframe.src = 'about:blank'; 
+            } else {
+                // iframe src'sini ayarla ve görüntüleyiciyi aç
+                // Google Drive Gömme URL formatı: https://drive.google.com/file/d/FILE_ID/preview
+                iframe.src = `https://drive.google.com/file/d/${fileId}/preview`;
+                viewer.style.display = 'block';
+            }
+        }
+    </script>
+</head>
+<body>
+
+    <h1>AWARE PV Projesi TÜBİTAK Başvuru Formu</h1>
+
+    <div class="container">
+        
+        <div class="document-card" onclick="toggleViewer('doc-viewer-1', '1CMXu72hmEhWkYDnIA4ty5A6IouisEabl')">
+            <a>01 Proje Yürütücüsü [PDF]</a>
+        </div>
+        <div id="doc-viewer-1" class="viewer-container">
+            <iframe src="about:blank" allow="autoplay"></iframe>
+        </div>
+
+        <div class="document-card" onclick="toggleViewer('doc-viewer-2', '1tg4vEWSY5VKwN4j-4QZqoJc2_7B_U-ZD')">
+            <a>02 Proje Bilgileri [PDF]</a>
+        </div>
+        <div id="doc-viewer-2" class="viewer-container">
+            <iframe src="about:blank" allow="autoplay"></iframe>
+        </div>
+
+        <div class="document-card" onclick="toggleViewer('doc-viewer-3', '1H2PvRPZxl6dOz2AF7uwKfAGYknF_AKPr')">
+            <a>03 Uluslararası Proje Bilgileri [PDF]</a>
+        </div>
+        <div id="doc-viewer-3" class="viewer-container">
+            <iframe src="about:blank" allow="autoplay"></iframe>
+        </div>
+
+        <div class="document-card" onclick="toggleViewer('doc-viewer-4', '1A8N-A9JN9eA1823CYlxGJ2jt-2nBvb7e')">
+            <a>04 Uluslararası Proje Ortakları [PDF]</a>
+        </div>
+        <div id="doc-viewer-4" class="viewer-container">
+            <iframe src="about:blank" allow="autoplay"></iframe>
+        </div>
+
+        <div class="document-card" onclick="toggleViewer('doc-viewer-5', '1FSZHD5sRQ3jsksRxG-xUgCGNfvgrhu4V')">
+            <a>05 Faaliyet Alanları [PDF]</a>
+        </div>
+        <div id="doc-viewer-5" class="viewer-container">
+            <iframe src="about:blank" allow="autoplay"></iframe>
+        </div>
+
+        <div class="document-card" onclick="toggleViewer('doc-viewer-6', '1GG0ImJafnYdJ9OduXjJA90d084C9DTAA')">
+            <a>06 Anahtar Kelimeler [PDF]</a>
+        </div>
+        <div id="doc-viewer-6" class="viewer-container">
+            <iframe src="about:blank" allow="autoplay"></iframe>
+        </div>
+
+        <div class="document-card" onclick="toggleViewer('doc-viewer-7', '16dvtf6yCvYC0mPrW9qBH4Zqzcke7ZKKu')">
+            <a>07 Teknoloji Hazırlık Seviyesi [PDF]</a>
+        </div>
+        <div id="doc-viewer-7" class="viewer-container">
+            <iframe src="about:blank" allow="autoplay"></iframe>
+        </div>
+
+        <div class="document-card" onclick="toggleViewer('doc-viewer-8', '1sigZvmR0ywq4iTSpDHovRZjRCJzL5_7i')">
+            <a>07a Mevcut Teknoloji Hazırlık Seviyesi Soru Seti [Excel]</a>
+        </div>
+        <div id="doc-viewer-8" class="viewer-container">
+            <iframe src="about:blank" allow="autoplay"></iframe>
+        </div>
+
+        <div class="document-card" onclick="toggleViewer('doc-viewer-9', '1Iki8mtLhsXgjvmCREBfB5JGe2uiGcAk8')">
+            <a>08 Proje Personeli [PDF]</a>
+        </div>
+        <div id="doc-viewer-9" class="viewer-container">
+            <iframe src="about:blank" allow="autoplay"></iframe>
+        </div>
+
+        <div class="document-card" onclick="toggleViewer('doc-viewer-10', '1C3BulE6mnkNWZ80Y39F_5rQ-cw1eaimq')">
+            <a>09 Proje Ekibi Dışındaki Hak Sahipleri [PDF]</a>
+        </div>
+        <div id="doc-viewer-10" class="viewer-container">
+            <iframe src="about:blank" allow="autoplay"></iframe>
+        </div>
+
+        <div class="document-card" onclick="toggleViewer('doc-viewer-11', '1DDIiKtx08JC-6oQp9ePrdfDyOe6tr9y3')">
+            <a>10 Ekibin Diğer Projeleri [PDF]</a>
+        </div>
+        <div id="doc-viewer-11" class="viewer-container">
+            <iframe src="about:blank" allow="autoplay"></iframe>
+        </div>
+
+        <div class="document-card" onclick="toggleViewer('doc-viewer-12', '1LztrXQkSG82VE7REzFMioCJ_0ZTeADus')">
+            <a>11 Çıkar İlişkisi Olan Kişiler [PDF]</a>
+        </div>
+        <div id="doc-viewer-12" class="viewer-container">
+            <iframe src="about:blank" allow="autoplay"></iframe>
+        </div>
+
+        <div class="document-card" onclick="toggleViewer('doc-viewer-13', '1ivdfBDExu9iEt99SSvzfXyC-tZgISJWE')">
+            <a>12 Ek Dosyalar [PDF]</a>
+        </div>
+        <div id="doc-viewer-13" class="viewer-container">
+            <iframe src="about:blank" allow="autoplay"></iframe>
+        </div>
+
+        <div class="document-card" onclick="toggleViewer('doc-viewer-14', '1358TqHKMg99IiI7f3MjLGkPDSfE-WnYW')">
+            <a>12-1 Özgeçmiş - Hasan Sarptaş [PDF]</a>
+        </div>
+        <div id="doc-viewer-14" class="viewer-container">
+            <iframe src="about:blank" allow="autoplay"></iframe>
+        </div>
+
+        <div class="document-card" onclick="toggleViewer('doc-viewer-15', '1qSvCDUzZMU0N1NSej3YmbppRds3MKHP4')">
+            <a>12-2 Performans Göstergeleri - Hasan Sarptaş [PDF]</a>
+        </div>
+        <div id="doc-viewer-15" class="viewer-container">
+            <iframe src="about:blank" allow="autoplay"></iframe>
+        </div>
+
+        <div class="document-card" onclick="toggleViewer('doc-viewer-16', '1gXQm90srIyGQSIYUm3V-TGnKniEejF0H')">
+            <a>12-3 AWARE PV Uluslararası Başvuru Belgesi [PDF]</a>
+        </div>
+        <div id="doc-viewer-16" class="viewer-container">
+            <iframe src="about:blank" allow="autoplay"></iframe>
+        </div>
+
+        <div class="document-card" onclick="toggleViewer('doc-viewer-17', '1bFeBOhkMD8LeRdmCsbgba3-cyl1yUEaM')">
+            <a>12-4 AWARE PV Financial Sheet [PDF]</a>
+        </div>
+        <div id="doc-viewer-17" class="viewer-container">
+            <iframe src="about:blank" allow="autoplay"></iframe>
+        </div>
+
+        <div class="document-card" onclick="toggleViewer('doc-viewer-18', '12i9o7KgxcUSEqtBLt4hYQcP9TIO_ryin')">
+            <a>12-5 Yapay Zeka Kullanım Belgesi [PDF]</a>
+        </div>
+        <div id="doc-viewer-18" class="viewer-container">
+            <iframe src="about:blank" allow="autoplay"></iframe>
+        </div>
+
+        <div class="document-card" onclick="toggleViewer('doc-viewer-19', '1pCrU81v5_aMmrQoTEqxHeQnPJ_VOnzwh')">
+            <a>12-6 Özgeçmiş - Neslihan Çolak [PDF]</a>
+        </div>
+        <div id="doc-viewer-19" class="viewer-container">
+            <iframe src="about:blank" allow="autoplay"></iframe>
+        </div>
+
+        <div class="document-card" onclick="toggleViewer('doc-viewer-20', '1LC7EvBGdrhdcJ2ExAQ_92DOoljAPFrRh')">
+            <a>12-7 Özgeçmiş - Mete Çubukçu [PDF]</a>
+        </div>
+        <div id="doc-viewer-20" class="viewer-container">
+            <iframe src="about:blank" allow="autoplay"></iframe>
+        </div>
+
+        <div class="document-card" onclick="toggleViewer('doc-viewer-21', '1l7ocAuHDY63_hGrm_7FYq-9_Uwfhhx4g')">
+            <a>12-8 Proje Akronim Belgesi [PDF]</a>
+        </div>
+        <div id="doc-viewer-21" class="viewer-container">
+            <iframe src="about:blank" allow="autoplay"></iframe>
+        </div>
+
+        <div class="document-card" onclick="toggleViewer('doc-viewer-22', '1A373jAago1cLZgDnqJinocbka-WM3OVx')">
+            <a>12-9 Mevcut THS Soru Seti [Excel]</a>
+        </div>
+        <div id="doc-viewer-22" class="viewer-container">
+            <iframe src="about:blank" allow="autoplay"></iframe>
+        </div>
+
+        <div class="document-card" onclick="toggleViewer('doc-viewer-23', '1imifFMOFZAy2SFIREnlTu1MrqCIhHlfl')">
+            <a>13 Yürütücü Kuruluşlar [PDF]</a>
+        </div>
+        <div id="doc-viewer-23" class="viewer-container">
+            <iframe src="about:blank" allow="autoplay"></iframe>
+        </div>
+
+        <div class="document-card" onclick="toggleViewer('doc-viewer-24', '1jO8RhBs0mpop5j4bEaxChNZVT6tM8Bbb')">
+            <a>13.1 ERG - Alt Proje Bilgikeri [PDF]</a>
+        </div>
+        <div id="doc-viewer-24" class="viewer-container">
+            <iframe src="about:blank" allow="autoplay"></iframe>
+        </div>
+
+        <div class="document-card" onclick="toggleViewer('doc-viewer-25', '1ppJ0G8H1iAwr2ewax3za0Y6CIkiqtEXz')">
+            <a>14 Yayın Bilgileri [PDF]</a>
+        </div>
+        <div id="doc-viewer-25" class="viewer-container">
+            <iframe src="about:blank" allow="autoplay"></iframe>
+        </div>
+
+    </div>
+
+</body>
+</html>
