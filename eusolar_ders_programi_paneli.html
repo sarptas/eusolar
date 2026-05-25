@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ders Programı Oluşturma Paneli - Ege Üniversitesi</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Segoe UI', Roboto, Arial, sans-serif;
+  background: #f0f2f5;
+  color: #333;
+  min-height: 100vh;
+}
+.header {
+  background: linear-gradient(135deg, #0B5EA8 0%, #0a4f8f 100%);
+  color: #fff;
+  padding: 18px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+.header h1 { font-size: 1.3em; font-weight: 600; letter-spacing: 0.3px; }
+.header h1 span { font-weight: 300; font-size: 0.85em; opacity: 0.85; display: block; }
+.header-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+.btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 8px 16px; border: none; border-radius: 6px;
+  font-size: 0.85em; font-weight: 500; cursor: pointer;
+  transition: all 0.2s; text-decoration: none; white-space: nowrap;
+}
+.btn-primary { background: #fff; color: #0B5EA8; }
+.btn-primary:hover { background: #e8f0fe; }
+.btn-success { background: #28a745; color: #fff; }
+.btn-success:hover { background: #218838; }
+.btn-danger { background: #dc3545; color: #fff; }
+.btn-danger:hover { background: #c82333; }
+.btn-warning { background: #ffc107; color: #333; }
+.btn-warning:hover { background: #e0a800; }
+.btn-outline { background: transparent; color: #fff; border: 1px solid rgba(255,255,255,0.4); }
+.btn-outline:hover { background: rgba(255,255,255,0.1); border-color: #fff; }
+.btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.container { max-width: 1600px; margin: 0 auto; padding: 16px; }
+.main-grid { display: grid; grid-template-columns: 320px 1fr; gap: 16px; align-items: start; }
+@media (max-width: 1000px) { .main-grid { grid-template-columns: 1fr; } }
+.panel {
+  background: #fff; border-radius: 10px; box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+  overflow: hidden;
+}
+.panel-header {
+  padding: 14px 18px; font-weight: 600; font-size: 0.95em;
+  background: #f8f9fa; border-bottom: 1px solid #e9ecef;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.panel-body { padding: 14px; }
+.upload-zone {
+  border: 2px dashed #ccc; border-radius: 8px; padding: 28px 16px;
+  text-align: center; cursor: pointer; transition: all 0.3s;
+  background: #fafafa;
+}
+.upload-zone:hover, .upload-zone.dragover {
+  border-color: #0B5EA8; background: #e8f0fe;
+}
+.upload-zone .icon { font-size: 2.2em; color: #0B5EA8; margin-bottom: 8px; }
+.upload-zone p { color: #666; font-size: 0.85em; }
+.upload-zone input { display: none; }
+.course-count { font-size: 0.8em; color: #666; }
+.course-list { max-height: 500px; overflow-y: auto; margin-top: 10px; }
+.course-item {
+  padding: 10px 12px; margin-bottom: 6px; border-radius: 6px;
+  background: #f8f9fa; border: 1px solid #e9ecef;
+  cursor: grab; transition: all 0.2s; user-select: none;
+  display: flex; align-items: center; gap: 10px;
+}
+.course-item:hover { background: #e8f0fe; border-color: #0B5EA8; }
+.course-item:active { cursor: grabbing; }
+.course-item.dragging { opacity: 0.4; }
+.course-code {
+  font-weight: 700; color: #E8720C; font-size: 0.82em; min-width: 48px;
+}
+.course-info { flex: 1; min-width: 0; }
+.course-name { font-size: 0.85em; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.course-meta { font-size: 0.75em; color: #888; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+/* Timetable */
+.timetable { width: 100%; border-collapse: collapse; font-size: 0.95em; table-layout: fixed; }
+.timetable th {
+  background: #0B5EA8; color: #fff; padding: 8px 4px;
+  text-align: center; font-weight: 600; border: 1px solid #0a4f8f;
+  white-space: nowrap; width: 14%;
+}
+.timetable th:first-child { width: 12%; }
+.timetable th:nth-child(2) { width: 10%; }
+.timetable td {
+  border: 1px solid #d0dde9; padding: 0; vertical-align: top;
+}
+.timetable .classroom-cell {
+  text-align: center; font-weight: 700; color: #0B5EA8;
+  background: #f0f4ff; padding: 6px 4px;
+  border-bottom: 2px solid #0B5EA8;
+  vertical-align: middle;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  max-width: 0;
+}
+.timetable .time-cell {
+  text-align: center; font-weight: 600; color: #555;
+  background: #f8f9fa; padding: 6px 4px; white-space: nowrap;
+  font-size: 0.9em;
+}
+.drop-zone {
+  height: 100%; min-height: 64px; padding: 4px;
+  transition: all 0.2s; position: relative;
+}
+.drop-zone.dragover {
+  background: #daeaf7; box-shadow: inset 0 0 0 2px #0B5EA8;
+}
+.drop-zone.empty {
+  display: flex; align-items: center; justify-content: center;
+  color: #ddd; font-size: 0.75em;
+}
+.slot-card {
+  background: #fff; border: 1px solid #d0dde9; border-radius: 4px;
+  padding: 5px 7px; cursor: pointer; transition: all 0.2s;
+  border-left: 3px solid #E8720C;
+}
+.slot-card:hover { background: #f0f4ff; border-color: #0B5EA8; }
+.slot-card .slot-code { font-weight: 700; color: #E8720C; font-size: 0.95em; }
+.slot-card .slot-instructor { font-size: 0.82em; color: #0B5EA8; margin-top: 2px; }
+.slot-card .slot-remove {
+  float: right; color: #ccc; font-size: 1em; line-height: 1;
+  transition: color 0.2s; cursor: pointer;
+}
+.slot-card .slot-remove:hover { color: #dc3545; }
+
+.info-bar {
+  display: flex; gap: 16px; flex-wrap: wrap; padding: 10px 0;
+  font-size: 0.82em; color: #666;
+}
+
+/* Add classroom */
+.add-classroom-bar {
+  display: flex; gap: 8px; margin-top: 10px; align-items: center;
+}
+.add-classroom-bar input {
+  flex: 1; padding: 8px 12px; border: 1px solid #ddd; border-radius: 6px;
+  font-size: 0.85em; outline: none;
+}
+.add-classroom-bar input:focus { border-color: #0B5EA8; }
+
+.modal-overlay {
+  display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4);
+  z-index: 1000; align-items: center; justify-content: center;
+}
+.modal-overlay.active { display: flex; }
+.modal {
+  background: #fff; border-radius: 10px; padding: 24px;
+  max-width: 600px; width: 90%; max-height: 80vh; overflow-y: auto;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+}
+.modal h3 { margin-bottom: 12px; color: #0B5EA8; }
+.modal textarea {
+  width: 100%; min-height: 200px; font-family: 'Consolas', monospace;
+  font-size: 0.82em; padding: 10px; border: 1px solid #ddd;
+  border-radius: 6px; resize: vertical;
+}
+.modal-btns { display: flex; gap: 8px; margin-top: 12px; justify-content: flex-end; }
+
+.toast {
+  position: fixed; bottom: 24px; right: 24px; z-index: 2000;
+  padding: 12px 20px; border-radius: 8px; color: #fff;
+  font-size: 0.85em; font-weight: 500; box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  transform: translateY(120px); opacity: 0;
+  transition: all 0.4s;
+}
+.toast.show { transform: translateY(0); opacity: 1; }
+.toast.success { background: #28a745; }
+.toast.error { background: #dc3545; }
+.toast.info { background: #0B5EA8; }
+
+.instructions {
+  font-size: 0.78em; color: #888; line-height: 1.5; margin-top: 10px;
+  padding: 8px 12px; background: #fff8e1; border-radius: 6px;
+  border-left: 3px solid #ffc107;
+}
+.instructions strong { color: #555; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div>
+    <h1>EGE ÜNİVERSİTESİ <span>Güneş Enerjisi Enstitüsü - Ders Programı Oluşturma Paneli</span></h1>
+  </div>
+  <div class="header-actions">
+    <button class="btn btn-primary" onclick="document.getElementById('fileInput').click()">📂 Excel Yükle</button>
+    <button class="btn btn-outline" onclick="exportJSON()" id="btnExportJSON" disabled>💾 JSON Yedekle</button>
+    <button class="btn btn-outline" onclick="importJSON()">📂 JSON Yükle</button>
+    <button class="btn btn-warning" onclick="exportHTML()">🌐 HTML Kaydet</button>
+    <button class="btn btn-danger" onclick="clearAll()">🗑 Temizle</button>
+  </div>
+</div>
+
+<div class="container">
+  <div class="info-bar">
+    <span id="statusMsg">Excel dosyası yükleyerek başlayın</span>
+    <span id="courseStatus"></span>
+    <span id="slotStatus"></span>
+  </div>
+
+  <div class="main-grid">
+    <!-- LEFT: Course list -->
+    <div class="panel">
+      <div class="panel-header">
+        <span>📋 Yüklenen Dersler</span>
+        <span class="course-count" id="courseCount">0 ders</span>
+      </div>
+      <div class="panel-body">
+        <div class="upload-zone" id="uploadZone">
+          <div class="icon">📄</div>
+          <p><strong>Excel dosyasını seçin</strong><br>veya sürükleyip bırakın</p>
+          <p style="font-size:0.75em; color:#999; margin-top:6px;">
+            Excel'de tek sayfa: <b>Dersler</b> (Kod, Dersin Adı, Öğretim Üyesi)
+          </p>
+          <input type="file" id="fileInput" accept=".xlsx,.xls">
+        </div>
+        <div id="fileInfo" style="display:none; text-align:center; padding:10px; background:#e8f0fe; border-radius:8px; margin-bottom:8px;">
+          <span id="fileName" style="font-weight:500;color:#0B5EA8;"></span>
+          <a href="#" onclick="event.preventDefault();document.getElementById('fileInput').click();" style="margin-left:10px;color:#E8720C;font-size:0.85em;">Değiştir</a>
+        </div>
+        <div class="course-list" id="courseList"></div>
+        <div class="add-classroom-bar">
+          <input type="text" id="newClassroomInput" placeholder="Yeni derslik adı..." onkeydown="if(event.key==='Enter')addClassroom()">
+          <button class="btn btn-success" onclick="addClassroom()" style="white-space:nowrap;">+ Derslik Ekle</button>
+        </div>
+        <div class="instructions">
+          <strong>✋ Kullanım:</strong> Dersleri tablodaki uygun derslik/gün/saat dilimine sürükleyip bırakın. Dersi kaldırmak için <strong>çift tıklayın</strong> veya &times; butonunu kullanın.
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT: Timetable -->
+    <div class="panel">
+      <div class="panel-header">
+        <span>📅 Haftalık Ders Programı</span>
+        <span style="font-size:0.8em; color:#888;" id="semesterLabel"></span>
+      </div>
+      <div class="panel-body" style="overflow-x:auto;">
+        <table class="timetable" id="timetable">
+          <thead>
+            <tr>
+              <th>Derslik</th>
+              <th>Saat</th>
+              <th>Pazartesi</th>
+              <th>Salı</th>
+              <th>Çarşamba</th>
+              <th>Perşembe</th>
+              <th>Cuma</th>
+            </tr>
+          </thead>
+          <tbody id="timetableBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="jsonModal">
+  <div class="modal">
+    <h3 id="jsonModalTitle">JSON Verisi</h3>
+    <textarea id="jsonTextarea" placeholder="JSON verisini yapıştırın..."></textarea>
+    <div class="modal-btns">
+      <button class="btn btn-primary" onclick="closeModal()">İptal</button>
+      <button class="btn btn-success" id="jsonModalAction" onclick="applyJSON()">Uygula</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+<input type="file" id="jsonFileInput" accept=".json" style="display:none" onchange="importJSONFile(this.files[0])">
+
+<script>
+// ============= STATE =============
+let allCourses = [];
+let availableCourses = [];
+let classrooms = [];
+let schedule = {};
+const DAYS = ['Pazartesi', 'Salı', 'Çarşamba', 'Perşembe', 'Cuma'];
+const SLOTS = ['09:15', '13:30'];
+let dragSourceIdx = null;
+
+// ============= KEY =============
+function getKey(classroom, day, time) {
+  return classroom + '|' + day + '|' + time;
+}
+
+// ============= RENDER =============
+function renderTimetable() {
+  const tbody = document.getElementById('timetableBody');
+  tbody.innerHTML = '';
+  if (classrooms.length === 0) {
+    const tr = document.createElement('tr');
+    const td = document.createElement('td');
+    td.colSpan = 7;
+    td.style.textAlign = 'center';
+    td.style.padding = '30px';
+    td.style.color = '#aaa';
+    td.textContent = 'Henüz derslik eklenmedi. Excel yükleyin veya "Derslik Ekle" butonunu kullanın.';
+    tr.appendChild(td);
+    tbody.appendChild(tr);
+    return;
+  }
+  classrooms.forEach(cr => {
+    SLOTS.forEach((time, ti) => {
+      const tr = document.createElement('tr');
+      // Classroom name cell (rowspan=2 for first time slot)
+      if (ti === 0) {
+        const tdCr = document.createElement('td');
+        tdCr.className = 'classroom-cell';
+        tdCr.rowSpan = 2;
+        tdCr.textContent = cr;
+        tr.appendChild(tdCr);
+      }
+      // Time cell
+      const tdTime = document.createElement('td');
+      tdTime.className = 'time-cell';
+      tdTime.textContent = time;
+      tr.appendChild(tdTime);
+      // Day cells
+      DAYS.forEach(day => {
+        const td = document.createElement('td');
+        td.style.padding = '0';
+        const dz = document.createElement('div');
+        dz.className = 'drop-zone empty';
+        dz.dataset.classroom = cr;
+        dz.dataset.day = day;
+        dz.dataset.time = time;
+        dz.addEventListener('dragover', e => e.preventDefault());
+        dz.addEventListener('dragenter', e => { e.preventDefault(); dz.classList.add('dragover'); });
+        dz.addEventListener('dragleave', () => dz.classList.remove('dragover'));
+        dz.addEventListener('drop', handleDrop);
+        td.appendChild(dz);
+        tr.appendChild(td);
+      });
+      tbody.appendChild(tr);
+    });
+  });
+  // Re-render all slots
+  Object.keys(schedule).forEach(key => {
+    const [cr, day, time] = key.split('|');
+    renderSlot(cr, day, time);
+  });
+  updateStatus();
+}
+
+function renderSlot(classroom, day, time) {
+  const key = getKey(classroom, day, time);
+  const el = document.querySelector(
+    `.drop-zone[data-classroom="${classroom}"][data-day="${day}"][data-time="${time}"]`
+  );
+  if (!el) return;
+  if (schedule[key]) {
+    const c = schedule[key];
+    el.className = 'drop-zone';
+    el.innerHTML = `
+      <div class="slot-card" title="Kaldırmak için çift tıklayın" ondblclick="removeSlot('${classroom}','${day}','${time}')">
+        <span class="slot-remove" onclick="event.stopPropagation();removeSlot('${classroom}','${day}','${time}')">&times;</span>
+        <div class="slot-code">${escHtml(c.kod)}</div>
+        <div class="slot-instructor" style="font-size:0.78em;color:#0B5EA8;margin-top:2px;">${escHtml(c.ogretim)}</div>
+      </div>`;
+  } else {
+    el.className = 'drop-zone empty';
+    el.innerHTML = '';
+  }
+}
+
+function setSlot(classroom, day, time, course) {
+  const key = getKey(classroom, day, time);
+  if (schedule[key]) { showToast('Bu dilim dolu!', 'error'); return false; }
+  const conflict = Object.entries(schedule).find(([k, v]) => {
+    const [cr, d, t] = k.split('|');
+    return v.ogretim && v.ogretim === course.ogretim && d === day && t === time && cr !== classroom;
+  });
+  if (conflict) {
+    showToast(course.ogretim + ' aynı gün/saatte başka derslikte!', 'error');
+    return false;
+  }
+  schedule[key] = course;
+  renderSlot(classroom, day, time);
+  updateStatus();
+  return true;
+}
+
+function removeSlot(classroom, day, time) {
+  const key = getKey(classroom, day, time);
+  const course = schedule[key];
+  if (!course) return;
+  delete schedule[key];
+  availableCourses.push(course);
+  renderSlot(classroom, day, time);
+  renderCourseList();
+  updateStatus();
+}
+
+function updateStatus() {
+  const count = Object.keys(schedule).length;
+  document.getElementById('slotStatus').textContent = '| ' + count + ' ders yerleştirildi';
+}
+
+// ============= COURSE LIST =============
+function renderCourseList() {
+  const list = document.getElementById('courseList');
+  if (availableCourses.length === 0) {
+    list.innerHTML = '<div style="text-align:center;padding:20px;color:#aaa;">Tüm dersler yerleştirildi</div>';
+    document.getElementById('courseCount').textContent = '0 ders';
+    document.getElementById('btnExportJSON').disabled = allCourses.length === 0;
+    return;
+  }
+  document.getElementById('courseCount').textContent = availableCourses.length + ' ders';
+  document.getElementById('btnExportJSON').disabled = false;
+  list.innerHTML = '';
+  availableCourses.forEach((c, idx) => {
+    const div = document.createElement('div');
+    div.className = 'course-item';
+    div.draggable = true;
+    div.dataset.index = idx;
+    div.addEventListener('dragstart', e => {
+      dragSourceIdx = idx;
+      e.dataTransfer.setData('text/plain', idx);
+      div.classList.add('dragging');
+    });
+    div.addEventListener('dragend', () => div.classList.remove('dragging'));
+    div.innerHTML = `
+      <div class="course-code">${escHtml(c.kod)}</div>
+      <div class="course-info">
+        <div class="course-name">${escHtml(c.ad)}</div>
+        <div class="course-meta">${escHtml(c.ogretim)}</div>
+      </div>`;
+    list.appendChild(div);
+  });
+}
+
+// ============= DRAG & DROP =============
+function handleDrop(e) {
+  e.preventDefault();
+  const dz = e.currentTarget;
+  dz.classList.remove('dragover');
+  const classroom = dz.dataset.classroom;
+  const day = dz.dataset.day;
+  const time = dz.dataset.time;
+  if (dragSourceIdx === null) return;
+  const course = availableCourses[dragSourceIdx];
+  if (!course) return;
+  const idx = dragSourceIdx;
+  dragSourceIdx = null;
+  const ok = setSlot(classroom, day, time, course);
+  if (ok) {
+    availableCourses.splice(idx, 1);
+    renderCourseList();
+    showToast(course.kod + ' → ' + day + ' ' + time, 'success');
+  } else {
+    showToast('Bu dilim dolu!', 'error');
+  }
+}
+
+// ============= CLASSROOM MGMT =============
+function addClassroom() {
+  const input = document.getElementById('newClassroomInput');
+  const name = input.value.trim();
+  if (!name) { showToast('Derslik adı girin', 'error'); return; }
+  if (classrooms.includes(name)) { showToast('Bu derslik zaten var!', 'error'); return; }
+  classrooms.push(name);
+  input.value = '';
+  renderTimetable();
+  showToast('Derslik eklendi: ' + name, 'success');
+  document.getElementById('statusMsg').textContent = '✅ ' + classrooms.length + ' derslik, ' + allCourses.length + ' ders yüklendi';
+}
+
+// ============= EXCEL PARSING =============
+function handleFile(file) {
+  if (!file) return;
+  showFileLoaded(file.name);
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      const data = new Uint8Array(e.target.result);
+      const workbook = XLSX.read(data, { type: 'array' });
+      parseCourses(workbook);
+    } catch (err) {
+      showToast('Excel okuma hatası: ' + err.message, 'error');
+    }
+  };
+  reader.readAsArrayBuffer(file);
+}
+
+function parseCourses(workbook) {
+  allCourses = [];
+  availableCourses = [];
+  let sheetIdx = workbook.SheetNames.findIndex(n => n.toLowerCase().includes('ders'));
+  if (sheetIdx === -1) sheetIdx = 0;
+  const sheet = workbook.Sheets[workbook.SheetNames[sheetIdx]];
+  const json = XLSX.utils.sheet_to_json(sheet, { defval: '' });
+  if (!json || json.length === 0) {
+    showToast('Excel\'de veri bulunamadı', 'error');
+    return;
+  }
+  const keys = Object.keys(json[0]);
+  const findKey = (patterns) => {
+    for (const p of patterns) {
+      const found = keys.find(k => k.toLowerCase().includes(p.toLowerCase()));
+      if (found) return found;
+    }
+    return null;
+  };
+  const kodKey = findKey(['kod', 'code', 'ders kodu', 'kodu', 'ders_kodu']);
+  const adKey = findKey(['ad', 'adı', 'ders adı', 'isim', 'name', 'ders_adi', 'dersin adı']);
+  const ogrKey = findKey(['öğretim', 'ogretim', 'üye', 'uye', 'hoca', 'instructor', 'ogretim_uyesi']);
+
+  if (!kodKey || !adKey) {
+    showToast('Kolon bulunamadı! Beklenen: Kod, Dersin Adı, Öğretim Üyesi', 'error');
+    return;
+  }
+
+  let count = 0;
+  json.forEach(row => {
+    const kod = row[kodKey] ? String(row[kodKey]).trim() : '';
+    const ad = row[adKey] ? String(row[adKey]).trim() : '';
+    const ogretim = row[ogrKey] ? String(row[ogrKey]).trim() : '';
+    if (kod && ad) { allCourses.push({ kod, ad, ogretim }); count++; }
+  });
+  availableCourses = [...allCourses];
+
+  if (count === 0) {
+    showToast('Hiç ders bulunamadı. Kolon adlarını kontrol edin.', 'error');
+    return;
+  }
+
+  renderCourseList();
+  const msg = '✅ ' + count + ' ders yüklendi. Derslikleri elle ekleyip dersleri tabloya sürükleyin.';
+  document.getElementById('statusMsg').textContent = msg;
+  showToast(count + ' ders yüklendi', 'success');
+}
+
+// ============= EXPORT HTML =============
+function exportHTML() {
+  const used = Object.keys(schedule);
+  if (used.length === 0) { showToast('Program boş!', 'error'); return; }
+  const semester = prompt('Dönem bilgisi:', '2025-2026 Bahar Yarıyılı');
+  if (!semester) return;
+
+  const rows = [];
+  const dayOrder = Object.fromEntries(DAYS.map((d,i) => [d,i]));
+  classrooms.forEach(cr => {
+    SLOTS.forEach(time => {
+      DAYS.forEach(day => {
+        const key = getKey(cr, day, time);
+        if (schedule[key]) {
+          rows.push({ classroom: cr, day, time, course: schedule[key] });
+        }
+      });
+    });
+  });
+
+  rows.sort((a,b) => {
+    const ka = a.course.kod.padStart(6, '0');
+    const kb = b.course.kod.padStart(6, '0');
+    if (ka < kb) return -1;
+    if (ka > kb) return 1;
+    return 0;
+  });
+
+  const rowHtml = rows.map(r => {
+    const c = r.course;
+    return `    <tr>
+      <td class="kod">${escHtml(c.kod)}</td>
+      <td>${escHtml(c.ad)}</td>
+      <td class="ogretim">${escHtml(c.ogretim)}</td>
+      <td class="gun">${escHtml(r.day)}</td>
+      <td class="saat">${escHtml(r.time)}</td>
+      <td class="derslik">${escHtml(r.classroom)}</td>
+    </tr>`;
+  }).join('\n');
+
+  const html = `<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ders Programı - Ege Üniversitesi Güneş Enerjisi Enstitüsü</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; }
+body {
+  font-family: Roboto, 'Segoe UI', Arial, sans-serif;
+  margin: 0; padding: 30px 16px;
+  background: #f5f7fa;
+}
+.baslik { text-align: center; font-weight: 600; font-size: 1.6em; color: #0B5EA8; margin-bottom: 6px; }
+.alt-baslik { text-align: center; font-size: 1em; color: #666; margin-bottom: 24px; }
+.ders-table {
+  border-collapse: collapse; font-size: 0.95em;
+  margin: 0 auto; width: auto; min-width: 60%;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+.ders-table th {
+  background-color: #0B5EA8; color: #fff;
+  padding: 10px 14px; text-align: left;
+  border: 1px solid #0a4f8f;
+}
+.ders-table td {
+  padding: 8px 14px; border: 1px solid #d0dde9;
+  vertical-align: top;
+}
+.ders-table tbody tr:nth-child(even) { background-color: #f8f9fa; }
+.ders-table tbody tr:hover { background-color: #daeaf7; }
+.ders-table td.gun { color: #0B5EA8; white-space: nowrap; font-weight: 500; }
+.ders-table td.saat { text-align: center; white-space: nowrap; color: #555; font-weight: 500; }
+.ders-table td.kod { text-align: center; font-weight: 700; color: #E8720C; white-space: nowrap; }
+.ders-table td.ogretim { color: #0B5EA8; white-space: nowrap; }
+.ders-table td.derslik { color: #666; white-space: nowrap; }
+.footer { text-align: center; margin-top: 20px; font-size: 0.8em; color: #999; }
+@media print {
+  body { background: #fff; padding: 0; }
+  .ders-table { box-shadow: none; }
+}
+</style>
+</head>
+<body>
+<p class="baslik">Ders Programı</p>
+<p class="alt-baslik">${escHtml(semester)}</p>
+<table class="ders-table">
+<thead>
+<tr><th>Kod</th><th>Dersin Adı</th><th>Öğretim Üyesi</th><th>Gün</th><th>Saat</th><th>Derslik</th></tr>
+</thead>
+<tbody>
+${rowHtml}
+</tbody>
+</table>
+<p class="footer">Ege Üniversitesi Güneş Enerjisi Enstitüsü</p>
+</body>
+</html>`;
+
+  downloadText(html, 'ders_programi.html', 'text/html');
+  showToast('HTML kaydedildi', 'success');
+}
+
+// ============= JSON BACKUP =============
+function exportJSON() {
+  const data = {
+    classrooms,
+    allCourses,
+    schedule,
+    exportedAt: new Date().toISOString()
+  };
+  downloadText(JSON.stringify(data, null, 2), 'ders_programi_yedek.json', 'application/json');
+  showToast('JSON yedek alındı', 'success');
+}
+
+function importJSON() { document.getElementById('jsonFileInput').click(); }
+
+function importJSONFile(file) {
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      const data = JSON.parse(e.target.result);
+      if (data.classrooms) classrooms = data.classrooms;
+      if (data.allCourses) allCourses = data.allCourses;
+      if (data.schedule) schedule = data.schedule;
+      availableCourses = allCourses.filter(c => {
+        return !Object.values(schedule).some(s => s.kod === c.kod && s.ad === c.ad);
+      });
+      renderCourseList();
+      renderTimetable();
+      document.getElementById('statusMsg').textContent = '✅ Yedek yüklendi';
+      showToast('Yedek yüklendi', 'success');
+    } catch (err) {
+      showToast('JSON hatası: ' + err.message, 'error');
+    }
+  };
+  reader.readAsText(file);
+}
+
+function downloadText(content, filename, mime) {
+  const blob = new Blob([content], { type: mime + ';charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = filename; a.click();
+  URL.revokeObjectURL(url);
+}
+
+function escHtml(s) {
+  if (!s) return '';
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+          .replace(/"/g,'&quot;').replace(/'/g,'&#039;');
+}
+
+// ============= CLEAR =============
+function clearAll() {
+  if (!confirm('Tüm programı temizlemek istediğinize emin misiniz?')) return;
+  allCourses = []; availableCourses = []; classrooms = []; schedule = {};
+  renderCourseList();
+  renderTimetable();
+  resetUploadZone();
+  document.getElementById('statusMsg').textContent = 'Excel dosyası yükleyerek başlayın';
+  showToast('Program temizlendi', 'info');
+}
+
+// ============= TOAST =============
+function showToast(msg, type) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.className = 'toast ' + type + ' show';
+  clearTimeout(el._timer);
+  el._timer = setTimeout(() => el.classList.remove('show'), 3000);
+}
+
+// ============= MODAL =============
+function closeModal() { document.getElementById('jsonModal').classList.remove('active'); }
+function applyJSON() {
+  try {
+      const data = JSON.parse(document.getElementById('jsonTextarea').value);
+      if (data.classrooms) classrooms = data.classrooms;
+      if (data.allCourses) allCourses = data.allCourses;
+      if (data.schedule) schedule = data.schedule;
+      availableCourses = allCourses.filter(c => {
+        return !Object.values(schedule).some(s => s.kod === c.kod && s.ad === c.ad);
+      });
+      renderCourseList();
+      renderTimetable();
+      document.getElementById('statusMsg').textContent = '✅ Yedek yüklendi';
+      closeModal();
+      showToast('JSON yüklendi', 'success');
+  } catch (err) {
+    showToast('Geçersiz JSON: ' + err.message, 'error');
+  }
+}
+
+// ============= UPLOAD ZONE =============
+const uploadZone = document.getElementById('uploadZone');
+const fileInput = document.getElementById('fileInput');
+
+uploadZone.addEventListener('click', function() { fileInput.click(); });
+uploadZone.addEventListener('dragover', function(e) { e.preventDefault(); this.classList.add('dragover'); });
+uploadZone.addEventListener('dragleave', function() { this.classList.remove('dragover'); });
+uploadZone.addEventListener('drop', function(e) {
+  e.preventDefault();
+  this.classList.remove('dragover');
+  if (e.dataTransfer.files.length > 0) handleFile(e.dataTransfer.files[0]);
+});
+fileInput.addEventListener('change', function() {
+  if (this.files.length > 0) handleFile(this.files[0]);
+});
+
+function showFileLoaded(fileName) {
+  uploadZone.style.display = 'none';
+  const info = document.getElementById('fileInfo');
+  info.style.display = 'block';
+  document.getElementById('fileName').textContent = '📄 ' + fileName;
+}
+
+function resetUploadZone() {
+  uploadZone.style.display = '';
+  document.getElementById('fileInfo').style.display = 'none';
+  fileInput.value = '';
+}
+
+// ============= INIT =============
+renderTimetable();
+renderCourseList();
+document.getElementById('semesterLabel').textContent =
+  new Date().getFullYear() + '-' + (new Date().getFullYear()+1) + ' Bahar Yarıyılı';
+
+document.addEventListener('keydown', function(e) {
+  if (e.ctrlKey && e.key === 's') { e.preventDefault(); exportHTML(); }
+});
+</script>
+</body>
+</html>
